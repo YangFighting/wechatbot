@@ -126,6 +126,9 @@ class WeChat(object):
     @staticmethod
     def res_by_tuling(input_xml_dict=None):
         tuling_api_url = "http://openapi.tuling123.com/openapi/api/v2"
+        tuling_error_code = [5000, 6000, 4000, 4001, 4002, 4003, 4005, 4007, 4100, 4200, 4300, 4400, 4500, 4600, 4602,
+                            7002, 8008, 0]
+
         if input_xml_dict.get("MsgType") != 'text':
             send_content = "哎呀，小鲸鱼只学会回复消息呢"
             return WeChat.res_text_message(input_xml_dict=input_xml_dict, send_content=send_content)
@@ -140,16 +143,15 @@ class WeChat(object):
         logging.warning("response_dict: {}".format(response_dict))
 
         code = response_dict.get("intent").get("code")
-        if code == 10004:
+        if code == 4003:
+            # 该apikey没有可用请求次数
+            send_content = "小鲸鱼有点累，不想聊天了"
+        elif code in tuling_error_code:
+            send_content = "小鲸鱼也不知道该怎么回复你了"
+        else:
             # 返回码正常
             results = response_dict.get("results")[0]
             send_content = results.get("values").get("text")
-
-        elif code == 4003:
-            # 该apikey没有可用请求次数
-            send_content = "小鲸鱼有点累，不想聊天了"
-        else:
-            send_content = "小鲸鱼也不知道该怎么回复你了"
         return WeChat.res_text_message(input_xml_dict=input_xml_dict, send_content=send_content)
 
 
@@ -192,22 +194,22 @@ def wechat():
                 # 关注
                 send_content = "我是小鲸鱼，很高心认识你呀"
                 return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
-        elif xml_dict.get("MsgType") == 'image':    # 图片
+        elif xml_dict.get("MsgType") == 'image':  # 图片
             send_content = "小鲸鱼还没学会看图呢"
             return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
-        elif xml_dict.get("MsgType") == 'voice':    # 声音
+        elif xml_dict.get("MsgType") == 'voice':  # 声音
             send_content = "声音"
             return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
-        elif xml_dict.get("MsgType") == 'video':    # 视频
+        elif xml_dict.get("MsgType") == 'video':  # 视频
             send_content = "小鲸鱼还没学会看视频呢"
             return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
-        elif xml_dict.get("MsgType") == 'shortvideo':   #短视频
+        elif xml_dict.get("MsgType") == 'shortvideo':  # 短视频
             send_content = "这个短视频小鲸鱼也不懂"
             return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
-        elif xml_dict.get("MsgType") == 'location':     # 地理位置
+        elif xml_dict.get("MsgType") == 'location':  # 地理位置
             send_content = "这个位置小鲸鱼也没去过"
             return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
-        elif xml_dict.get("MsgType") == 'link':     # 链接
+        elif xml_dict.get("MsgType") == 'link':  # 链接
             send_content = "小鲸鱼怕迷路，这个链接小鲸鱼不敢进去"
             return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
         else:
