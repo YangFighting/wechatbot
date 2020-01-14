@@ -183,9 +183,36 @@ def wechat():
         # 接收到文本信息
         if xml_dict.get("MsgType") == 'text':
             return WeChat.res_by_tuling(input_xml_dict=xml_dict)
+        elif xml_dict.get("MsgType") == 'event':
+            # 接收到事件
+            if xml_dict.get("Event") == 'unsubscribe':
+                # 取消关注
+                return ''
+            elif xml_dict.get("Event") == 'subscribe':
+                # 关注
+                send_content = "我是小鲸鱼，很高心认识你呀"
+                return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
+        elif xml_dict.get("MsgType") == 'image':    # 图片
+            send_content = "小鲸鱼还没学会看图呢"
+            return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
+        elif xml_dict.get("MsgType") == 'voice':    # 声音
+            send_content = "声音"
+            return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
+        elif xml_dict.get("MsgType") == 'video':    # 视频
+            send_content = "小鲸鱼还没学会看视频呢"
+            return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
+        elif xml_dict.get("MsgType") == 'shortvideo':   #短视频
+            send_content = "这个短视频小鲸鱼也不懂"
+            return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
+        elif xml_dict.get("MsgType") == 'location':     # 地理位置
+            send_content = "这个位置小鲸鱼也没去过"
+            return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
+        elif xml_dict.get("MsgType") == 'link':     # 链接
+            send_content = "小鲸鱼怕迷路，这个链接小鲸鱼不敢进去"
+            return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
         else:
-
-            return WeChat.get_echo_text_message(input_xml_dict=xml_dict)
+            send_content = "这是什么鬼东西"
+            return WeChat.res_text_message(input_xml_dict=xml_dict, send_content=send_content)
     else:
         logger.warning("请求方式错误")
         abort(403)
