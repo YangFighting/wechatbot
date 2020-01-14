@@ -20,7 +20,8 @@ WECHAT_TOKEN = 'python'
 TULING_APIKEY = 'd3b650fbd9c44f75bf93fff5050a6fee'
 
 HEADERS = {
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36"
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                  "Chrome/75.0.3770.80 Safari/537.36 "
 }
 
 
@@ -35,7 +36,6 @@ class WeChat(object):
         :param params:
         :return:
         """
-        signature = params.get("signature")
         timestamp = params.get("timestamp")
         nonce = params.get("nonce")
         # 对参数排序，拼接字符串
@@ -54,7 +54,7 @@ class WeChat(object):
     def get_echo_text_message(input_xml_dict=None):
         """
             回传文本信息，如果不是文本信息，返回 特定字符串
-        :param xml_str:
+        :param input_xml_dict:
         :return:
         """
         if input_xml_dict.get("MsgType") == 'text':
